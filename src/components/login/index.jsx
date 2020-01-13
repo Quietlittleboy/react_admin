@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Icon } from 'antd';
+import { Form, Input, Button, Icon, message } from 'antd';
+import axios from 'axios';
 
 import logo from './logo.png';
 import './index.less';
 
-@Form.create()
-class Longi extends Component {
+const { Item } = Form;
 
+@Form.create()
+class Login extends Component {
+    // 自带定义表单验证功能
     validator = (rule, value, callback) => {
 
         const name = rule.field === 'username' ? '用户名' : '密码';
@@ -27,6 +30,49 @@ class Longi extends Component {
         callback();
     };
 
+    // form 发送请求功能
+    login = (e) => {
+        e.preventDefault();
+
+        // 验证表单收集数据
+        this.props.form.validateFields((err, values) => {
+            // console.log(err, values);
+
+            // 验证表单
+            if (!err) {
+
+                const { username, password } = values;
+                // console.log(username, password);
+
+                // 发送请求
+                axios.post('/api/login', { username, password })
+                    .then((response) => {
+                        // 上面判断请求是否成功,请求成功不代表登录成功
+                    // console.log(response);
+
+                        // 判断是否登录成
+                        if(response.data.status === 0){
+
+                            // 登录成功再跳转到Home页面
+                            this.props.history.replace('/');
+                        }else{
+
+                            // 登录失败
+                            message.error(response.data.msg);
+                            this.props.form.resetFields(['password']);
+                        }
+                    })
+                    .catch((err) => {
+
+                        // 请求失败
+                        console.log(err);
+                        message.error('网络错误...')
+                        this.props.form.resetFields(['password']);
+
+                    })
+            }
+        })
+    }
 
 
     render() {
@@ -42,8 +88,8 @@ class Longi extends Component {
 
                 <section className='login-section'>
                     <h3>用户登录</h3>
-                    <Form className='login-form'>
-                        <Form.Item>
+                    <Form className='login-form' onSubmit={this.login}>
+                        <Item>
                             {getFieldDecorator('username', {
                                 rules: [
                                     {
@@ -58,9 +104,9 @@ class Longi extends Component {
                                     placeholder='用户名'
                                 />
                             )}
-                        </Form.Item>
+                        </Item>
 
-                        <Form.Item>
+                        <Item>
                             {getFieldDecorator('password', {
                                 rules: [
                                     {
@@ -75,14 +121,14 @@ class Longi extends Component {
                                     placeholder='密码'
                                 />
                             )}
-                        </Form.Item>
+                        </Item>
 
-                        <Form.Item>
-                            <Button className='login-form-btn' type='primary'>
+                        <Item>
+                            <Button className='login-form-btn' type='primary' htmlType='submit'>
                                 登录
-              </Button>
+                            </Button>
 
-                        </Form.Item>
+                        </Item>
                     </Form>
                 </section>
             </div>
@@ -90,4 +136,4 @@ class Longi extends Component {
     }
 }
 
-export default Longi;
+export default Login;
