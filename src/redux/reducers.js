@@ -6,7 +6,7 @@ import {getItem} from '../utils/storage'
 const initUser = getItem('user') || {};
 
 function user(prevState = initUser, action){
-    switch(action.type){
+    switch(action.type){ 
         case SAVE_USER:
             return action.data;
         default:

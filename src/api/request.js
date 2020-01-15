@@ -1,5 +1,6 @@
 import axios from 'axios';
 import errorCode from '../config/error-code';
+import store from '$redux/store';
 
 const axiosIstance = axios.create({
     baseURL: 'api',
@@ -9,12 +10,12 @@ const axiosIstance = axios.create({
     }
 })
 
+const token = store.getState().user.token;
+
 // 设置拦截器
 // 设置请求拦截器
 axiosIstance.interceptors.request.use(
     (config) =>{
-
-        let token = '' 
 
         if(token){
             config.headers.authorization =  `Bearer ${token}`

@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, Icon, message } from 'antd';
 import {connect} from 'react-redux';
+
 import {saveUserAsync} from '../../redux/actions'
+import withCheckLogin from '$cont/with-check-login';
 
 import logo from './logo.png';
 import './index.less';
 
 
 const { Item } = Form;
+@withCheckLogin
 @connect(null, {saveUserAsync})
 @Form.create()
 class Login extends Component {
