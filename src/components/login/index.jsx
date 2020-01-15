@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, Icon, message } from 'antd';
-import axios from 'axios';
+import {connect} from 'react-redux';
+import {saveUserAsync} from '../../redux/actions'
 
 import logo from './logo.png';
 import './index.less';
 
-const { Item } = Form;
 
+const { Item } = Form;
+@connect(null, {saveUserAsync})
 @Form.create()
 class Login extends Component {
     // 自带定义表单验证功能
@@ -42,34 +44,17 @@ class Login extends Component {
             if (!err) {
 
                 const { username, password } = values;
-                // console.log(username, password);
 
-                // 发送请求
-                axios.post('/api/login', { username, password })
-                    .then((response) => {
-                        // 上面判断请求是否成功,请求成功不代表登录成功
-                    // console.log(response);
+                this.props.saveUserAsync(username,password)
+                .then(() => {
+                    this.props.history.replace('/')
+                    message.success('登录成功')
+                })
+                .catch((msg) => {
+                    message.error(msg)
+                    this.props.form.resetFields(['password']);
 
-                        // 判断是否登录成
-                        if(response.data.status === 0){
-
-                            // 登录成功再跳转到Home页面
-                            this.props.history.replace('/');
-                        }else{
-
-                            // 登录失败
-                            message.error(response.data.msg);
-                            this.props.form.resetFields(['password']);
-                        }
-                    })
-                    .catch((err) => {
-
-                        // 请求失败
-                        console.log(err);
-                        message.error('网络错误...')
-                        this.props.form.resetFields(['password']);
-
-                    })
+                })
             }
         })
     }

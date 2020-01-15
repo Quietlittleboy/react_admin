@@ -1,7 +1,7 @@
 import axios from 'axios';
 import errorCode from '../config/error-code';
 
-let axiosIstance = axios.create({
+const axiosIstance = axios.create({
     baseURL: 'api',
     timeout: 20000,
     headers: {
@@ -68,3 +68,5 @@ axiosIstance.interceptors.response.use(
         
     }
 )
+
+export default axiosIstance;
