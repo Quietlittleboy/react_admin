@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {saveUserAsync} from '../../redux/actions'
 import withCheckLogin from '$cont/with-check-login';
 
-import logo from './logo.png';
+import logo from '../../assets/img/logo.png';
 import './index.less';
 
 
