@@ -17,7 +17,6 @@ export default class App extends Component {
                 </SiderDemo>
                 </Switch>
             </Router>
-            
         )
     }
 }

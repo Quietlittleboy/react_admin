@@ -38,6 +38,7 @@ export default class SiderDemo extends Component {
         <LeftNav />
 
         </Sider>
+        
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }} />
           <Content style={{ margin: '0 16px' }}>

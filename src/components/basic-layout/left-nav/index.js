@@ -1,72 +1,81 @@
-import React,{Component} from 'react';
-import {Menu, Icon} from 'antd';
+import React, { Component } from 'react';
+import { Menu, Icon } from 'antd';
+import { Link, withRouter} from 'react-router-dom';
+import menus from '$conf/menus';
 
-const{SubMenu, Item} = Menu;
+const { SubMenu, Item } = Menu;
+@withRouter
+class LeftNav extends Component {
 
+// 遍历菜单项
+ createMenus = menus => {
 
-
-export default class LeftNav extends Component{
-    render(){
-        return(
-            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Item key="1">
-              <Icon type="home" />
-              <span>首页</span>
-            </Item>
-
+    return menus.map(menu => {
+        // 二级菜单
+        if (menu.children) {
+          return (
             <SubMenu
-              key="sub1"
+              key={menu.path}
               title={
                 <span>
-                  <Icon type="appstore" />
-                  <span>商品</span>
+                  <Icon type={menu.icon} />
+                  <span>{menu.title}</span>
                 </span>
               }
             >
-              <Item key="3">
-                <Icon type="bars" />
-                <span>分类管理</span>
-              </Item>
-              <Item key="4">
-                <Icon type="tool" />
-                <span>商品管理</span>
-              </Item>
+              {menu.children.map(cMenu => {
+                return this.createMenuItem(cMenu);
+              })}
             </SubMenu>
+          )
 
-            <Item key="5">
-              <Icon type="user" />
-              <span>用户管理</span>
-            </Item>
-            <Item key="6">
-              <Icon type="safety-certificate" />
-              <span>权限管理</span>
-            </Item>
+        } else { // 一级菜单
+          return this.createMenuItem(menu);
 
-            <SubMenu
-              key="sub2"
-              title={
-                <span>
-                  <Icon type="area-chart" />
-                  <span>图形图标</span>
-                </span>
-              }
-            >
-              <Item key="7">
-                <Icon type="bar-chart" />
-                <span>柱状图</span>
+        }
+      }
 
-              </Item>
-              <Item key="8">
-                <Icon type="line-chart" />
-                <span>折线图</span>
-              </Item>
+    )
+  }
 
-              <Item key="9">
-                <Icon type="pie-chart" />
-                <span>饼状图</span>
-              </Item>
-            </SubMenu>
-          </Menu>
-        )
+  // 复用代码
+  createMenuItem = menu => {
+    return (
+      <Item key={menu.path}>
+        <Link to={menu.path}>
+        <Icon type={menu.icon} />
+        <span>{menu.title}</span>
+        </Link>
+        
+      </Item>
+    )
+  } 
+  
+
+  findOpenkeys = (pathname, menus) => {
+
+    const menu = menus.find(menu => menu.children && menu.children.find(cMenu => cMenu.path === pathname))
+      
+    if(menu){
+      return menu.path;
     }
+  }
+
+
+  render() {
+   const {pathname} = this.props.location;
+   const openkeys = this.findOpenkeys(pathname, menus);
+    return (
+      <Menu theme="dark" 
+      defaultSelectedKeys={[pathname]} 
+      defaultOpenKeys={[openkeys]}
+      mode="inline">
+        {/* {console.log(openkeys)} */}
+        
+        {this.createMenus(menus)}
+        
+      </Menu>
+    )
+  }
 }
+export default LeftNav;
