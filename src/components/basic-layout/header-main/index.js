@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import { Button, Icon, Modal } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 
 import screenfull from 'screenfull';
 import { removeItem } from '$utils/storage';
-import { removeUser } from '$redux/actions';
+import { removeUser, changeLanguage } from '$redux/actions';
 
 import './index.less';
-console.log(removeUser);
+// console.log(removeUser);
+@injectIntl
 @connect(
     state => ({
-        username: state.user.user && state.user.user.username
+        username: state.user.user && state.user.user.username,
+        language: state.language
     }),
     {
-        removeUser
+        removeUser,
+        changeLanguage
     }
 )
 @withRouter
@@ -47,8 +51,9 @@ class HeaderMain extends Component {
 
     // 退出登录功能
     logout = () => {
+        const {intl} = this.props
         Modal.confirm({
-            title: '您确定要退出登录吗？',
+            title: intl.formatMessage({id: 'logout'}),
             onOk: () => {
                 removeItem('user');
 
@@ -58,17 +63,27 @@ class HeaderMain extends Component {
         });
     }
 
-    
+    // 国际化功能
+    changeLanguage = () => {
+        const language = this.props.language === 'en' ? 'zh-CN' : 'en';
+        this.props.changeLanguage(language)
+    }
+
     render() {
         const { isScreenfull } = this.state
-        const { username } = this.props;
+        const { username, language } = this.props;
         return (
             <div className="header-main">
                 <div className="header-main-top">
                     <Button size="small" onClick={this.screenFull}>
                         <Icon type={isScreenfull ? "fullscreen-exit" : "fullscreen"} />
                     </Button>
-                    <Button size="small" className="header-main-lang">English</Button>
+                    <Button size="small" className="header-main-lang" onClick={this.changeLanguage}>
+                        {
+                            language === 'en' ? '中文' : 'English'
+                        }
+                        
+                    </Button>
                     <span>hello {username}</span>
                     <Button size="small" type="link" onClick={this.logout}>退出</Button>
                 </div>
