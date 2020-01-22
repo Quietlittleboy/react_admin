@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Layout, Breadcrumb} from 'antd';
+
 import LeftNav from './left-nav';
+import HeaderMain from './header-main';
 
 import logo from '../../assets/img/logo.png';
 import './index.less';
@@ -40,7 +42,10 @@ export default class SiderDemo extends Component {
         </Sider>
         
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }} />
+          <Header style={{ background: '#fff', padding: 0, height:80 }}>
+          <HeaderMain />
+          </Header>
+
           <Content style={{ margin: '0 16px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item>User</Breadcrumb.Item>
