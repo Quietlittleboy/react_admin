@@ -3,6 +3,7 @@ import { Button, Icon, Modal } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedHTMLMessage } from 'react-intl';
+import dayjs from 'dayjs';
 
 import screenfull from 'screenfull';
 import { removeItem } from '$utils/storage';
@@ -31,18 +32,30 @@ class HeaderMain extends Component {
     // 切换全屏图标
     handleScreenFullChange = () => {
         this.setState({
-            isScreenfull: !this.state.isScreenfull
+            isScreenfull: !this.state.isScreenfull,
+            date: Date.now()
         })
     }
 
-    // 监听切换事件
+    
     componentDidMount() {
+        // 监听切换事件
         screenfull.on('change', this.handleScreenFullChange);
+
+        // 头部时间功能
+        const timeId = setInterval(() => {
+            this.setState({
+                date: Date.now()
+            })
+        }, 1000)
     }
 
     // 解绑监听事件
     componentWillUnmount() {
         screenfull.off('change', this.handleScreenFullChange);
+
+        clearInterval(this.timeId);
+
     }
 
     // 切换全屏/缩小全屏
@@ -52,9 +65,9 @@ class HeaderMain extends Component {
 
     // 退出登录功能
     logout = () => {
-        const {intl} = this.props
+        const { intl } = this.props
         Modal.confirm({
-            title: intl.formatMessage({id: 'logout'}),
+            title: intl.formatMessage({ id: 'logout' }),
             onOk: () => {
                 removeItem('user');
 
@@ -72,19 +85,19 @@ class HeaderMain extends Component {
 
     // 头部标题
     findTtile = (menus, pathname) => {
-        for(let i = 0; i < menus.length; i++){
+        for (let i = 0; i < menus.length; i++) {
             const menu = menus[i];
 
-            if(menu.children){
-                for(let r = 0; r < menu.children.length; r++ ){
+            if (menu.children) {
+                for (let r = 0; r < menu.children.length; r++) {
                     const cMenu = menu.children[r];
-                    if(cMenu.path === pathname){
+                    if (cMenu.path === pathname) {
                         return cMenu.title;
                     }
                 }
 
-            }else{
-                if(menu.path === pathname){
+            } else {
+                if (menu.path === pathname) {
                     return menu.title;
                 }
             }
@@ -93,8 +106,8 @@ class HeaderMain extends Component {
 
 
     render() {
-        const { isScreenfull } = this.state
-        const { username, language, location: {pathname} } = this.props;
+        const { isScreenfull,date } = this.state
+        const { username, language, location: { pathname } } = this.props;
         const title = this.findTtile(menus, pathname);
 
         return (
@@ -107,16 +120,18 @@ class HeaderMain extends Component {
                         {
                             language === 'en' ? '中文' : 'English'
                         }
-                        
+
                     </Button>
                     <span>hello {username}</span>
                     <Button size="small" type="link" onClick={this.logout}>退出</Button>
                 </div>
                 <div className="header-main-bottom">
                     <span className="header-main-left">
-                        <FormattedHTMLMessage id={title}/>
+                        <FormattedHTMLMessage id={title} />
                     </span>
-                    <span className="header-main-right">2020/01/21</span>
+                    <span className="header-main-right">
+                        {dayjs(date).format('YYYY/MM/DD HH:mm:ss')}
+                    </span>
                 </div>
             </div>
         )
