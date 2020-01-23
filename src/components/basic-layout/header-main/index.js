@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { Button, Icon, Modal } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
+import { injectIntl, FormattedHTMLMessage } from 'react-intl';
 
 import screenfull from 'screenfull';
 import { removeItem } from '$utils/storage';
 import { removeUser, changeLanguage } from '$redux/actions';
+import menus from '$conf/menus';
 
 import './index.less';
 // console.log(removeUser);
@@ -69,9 +70,33 @@ class HeaderMain extends Component {
         this.props.changeLanguage(language)
     }
 
+    // 头部标题
+    findTtile = (menus, pathname) => {
+        for(let i = 0; i < menus.length; i++){
+            const menu = menus[i];
+
+            if(menu.children){
+                for(let r = 0; r < menu.children.length; r++ ){
+                    const cMenu = menu.children[r];
+                    if(cMenu.path === pathname){
+                        return cMenu.title;
+                    }
+                }
+
+            }else{
+                if(menu.path === pathname){
+                    return menu.title;
+                }
+            }
+        }
+    }
+
+
     render() {
         const { isScreenfull } = this.state
-        const { username, language } = this.props;
+        const { username, language, location: {pathname} } = this.props;
+        const title = this.findTtile(menus, pathname);
+
         return (
             <div className="header-main">
                 <div className="header-main-top">
@@ -88,7 +113,9 @@ class HeaderMain extends Component {
                     <Button size="small" type="link" onClick={this.logout}>退出</Button>
                 </div>
                 <div className="header-main-bottom">
-                    <span className="header-main-left">商品管理</span>
+                    <span className="header-main-left">
+                        <FormattedHTMLMessage id={title}/>
+                    </span>
                     <span className="header-main-right">2020/01/21</span>
                 </div>
             </div>
