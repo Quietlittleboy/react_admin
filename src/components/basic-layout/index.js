@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Breadcrumb} from 'antd';
+import { Layout} from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 import LeftNav from './left-nav';
@@ -50,11 +50,7 @@ class SiderDemo extends Component {
           <HeaderMain />
           </Header>
 
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
+          <Content style={{ margin: '30px 16px 0 16px' }}>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>{children}</div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
