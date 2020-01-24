@@ -43,7 +43,7 @@ class HeaderMain extends Component {
         screenfull.on('change', this.handleScreenFullChange);
 
         // 头部时间功能
-        const timeId = setInterval(() => {
+        this.timeId = setInterval(() => {
             this.setState({
                 date: Date.now()
             })

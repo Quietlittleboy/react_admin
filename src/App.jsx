@@ -4,13 +4,17 @@ import { IntlProvider } from 'react-intl';
 import { connect } from 'react-redux';
 import { ConfigProvider } from 'antd';
 
-import Home from './components/home';
 import Login from './containers/login';
 import SiderDemo from './components/basic-layout';
+import routes from './config/routes';
+// import Category from './components/category';
 import {en, zhCN} from './locales';
 
 import zh_CN from 'antd/es/locale/zh_CN';
 import en_US from 'antd/es/locale/en_US';
+
+// console.log(routes);
+
 
 @connect(
     (state) => ({language: state.language}),null
@@ -27,7 +31,11 @@ class App extends Component {
                     <Switch>
                         <Route path='/login' exact component={Login} />
                         <SiderDemo>
-                            <Route path='/' exact component={Home} />
+                            {routes.map((route) => {
+                                
+                            return <Route {...route} key={route.path}/>
+                            })}
+                            
                         </SiderDemo>
                     </Switch>
                 </Router>

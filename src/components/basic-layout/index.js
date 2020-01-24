@@ -4,14 +4,15 @@ import { FormattedMessage } from 'react-intl';
 
 import LeftNav from './left-nav';
 import HeaderMain from './header-main';
+import withCheckLogin from '$cont/with-check-login';
 
 import logo from '../../assets/img/logo.png';
 import './index.less';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-
-export default class SiderDemo extends Component {
+@withCheckLogin
+class SiderDemo extends Component {
 
   state = {
     collapsed: false,
@@ -62,3 +63,4 @@ export default class SiderDemo extends Component {
     );
   }
 }
+export default SiderDemo;
