@@ -30,3 +30,26 @@ export const reqAddCategory = (categoryName) => {
         }
     })
 }
+
+//请求修改分类
+export const reqUpdateCategory = (categoryId, categoryName) => {
+    return axiosIstance({
+        method: 'POST',
+        url: 'category/update',
+        data: {
+            categoryId,
+            categoryName
+        } 
+    })
+}
+
+//请求删除分类
+export const reqDeleteCategory = (categoryId) => {
+    return axiosIstance({
+        method: 'POST',
+        url: 'category/delete',
+        data: {
+            categoryId
+        } 
+    })
+}
