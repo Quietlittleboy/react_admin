@@ -12,7 +12,7 @@ export const reqLogin = (username, password) => {
     })
 }
 
-// 获取商品分类
+// 获取分类
 export const reqGetCategoryList = () => {
     return axiosIstance({
         url: 'category/get',
@@ -51,5 +51,17 @@ export const reqDeleteCategory = (categoryId) => {
         data: {
             categoryId
         } 
+    })
+}
+
+//请求商品数据
+export const reqGetProductList = (pageNum, pageSize) => {
+    return axiosIstance({
+        method: 'GET',
+        url: 'product/list',
+        params: {
+            pageNum,
+            pageSize
+        }
     })
 }
