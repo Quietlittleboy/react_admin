@@ -6,7 +6,7 @@ import {removeItem} from '$utils/storage';
 import {removeUser} from '$redux/actions';
 
 const axiosIstance = axios.create({
-    baseURL: 'api',
+    baseURL: '/api',
     timeout: 20000,
     headers: {
 

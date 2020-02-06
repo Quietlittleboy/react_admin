@@ -26,15 +26,34 @@ class AddProduct extends Component {
         //校验表单收集数据
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                
-            }
+                const { name, desc, categoryId, price, detail } = values;
 
+                reqAddProduct({
+                    name,
+                    desc,
+                    categoryId,
+                    price,
+                    detail: detail.toHTML()
+                  })
+                    .then(() => {
+                      message.success('添加商品成功');
+                      // 跳转到商品页面，查看
+                      this.props.history.push('/product');
+                    })
+                    .catch(err => {
+                      message.error(err);
+                    });
+            }
         })
+    }
+    
+    // 返回到商品列表
+    handleBack = () => {
+        this.props.history.push('/product');
     }
     render() {
 
         const { form: { getFieldDecorator }, categoryis } = this.props;
-        console.log(categoryis)
 
         const formItemLayout = {
             labelCol: {
@@ -49,7 +68,7 @@ class AddProduct extends Component {
 
         return <Card
             title={
-                <div>
+                <div onClick={this.handleBack}>
                     <Icon type='arrow-left' className='go-back' />
                     添加商品
             </div>
@@ -122,7 +141,7 @@ class AddProduct extends Component {
                         )(
                             <InputNumber
                                 formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={value => value.replace(/\￥\s?|(,*)/g, '')}
+                                parser={value => value.replace(/￥\s?|(,*)/g, '')}
                                 className='product-price'
                             />
                         )
