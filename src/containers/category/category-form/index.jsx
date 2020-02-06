@@ -3,7 +3,7 @@ import { Form, Input } from 'antd';
 import { PropTypes } from 'prop-types';
 
 @Form.create()
-class AddCategoryForm extends Component {
+class CategoryForm extends Component {
     static propTypes = {
         categoryName: PropTypes.string
     }
@@ -27,4 +27,4 @@ class AddCategoryForm extends Component {
         )
     }
 }
-export default AddCategoryForm;
+export default CategoryForm;

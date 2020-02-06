@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Button, Icon, Table, Modal, message } from 'antd';
 import { connect } from 'react-redux';
 
-import AddCategoryForm from './add-category-form';
+import CategoryForm from './category-form';
 import { getCategoryListAsync, addCategoryAsync, updateCategoryAsync, deleteCategoryAsync } from '$redux/actions';
 
 
@@ -24,7 +24,7 @@ class Category extends Component {
 
     componentDidMount() {
         // 调用请求数据的函数
-        this.props.getCategoryListAsync();
+      this.props.getCategoryListAsync();
 
     }
 
@@ -69,7 +69,7 @@ class Category extends Component {
 
     // 添加/修改 分类
     setCategory = () => {
-        const { validateFields, resetFields } = this.addCategoryForm.props.form;
+        const { validateFields, resetFields } = this.CategoryForm.props.form;
         const { category: { name, _id } } = this.state;
 
         // 验证表单，收集数据
@@ -107,6 +107,9 @@ class Category extends Component {
 
     // 隐藏分类对话框
     hiddenAddCategory = () => {
+
+        this.CategoryForm.props.form.resetFields();
+
         this.setState({
             isShowCategoryModal: false
         })
@@ -162,7 +165,7 @@ class Category extends Component {
                     onCancel={this.hiddenAddCategory}
                     width={300}
                 >
-                    <AddCategoryForm categoryName={category.name} wrappedComponentRef={(form) => this.addCategoryForm = form} />
+                    <CategoryForm categoryName={category.name} wrappedComponentRef={(form) => this.CategoryForm = form} />
                 </Modal>
             </Card>)
     }

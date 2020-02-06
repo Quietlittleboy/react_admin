@@ -11,6 +11,7 @@ import { removeUser, changeLanguage } from '$redux/actions';
 import menus from '$conf/menus';
 
 import './index.less';
+
 // console.log(removeUser);
 @injectIntl
 @connect(
@@ -91,12 +92,14 @@ class HeaderMain extends Component {
             if (menu.children) {
                 for (let r = 0; r < menu.children.length; r++) {
                     const cMenu = menu.children[r];
-                    if (cMenu.path === pathname) {
+                    // 让product/add地址也等于product的title
+                    if (pathname.indexOf(cMenu.path) !== -1 ) {
                         return cMenu.title;
                     }
                 }
 
             } else {
+                
                 if (menu.path === pathname) {
                     return menu.title;
                 }

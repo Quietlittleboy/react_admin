@@ -70,12 +70,17 @@ class LeftNav extends Component {
 
 
   render() {
-    const { pathname } = this.props.location;
+    let { pathname } = this.props.location;
+
+    if(pathname.indexOf('/product') !== -1){
+      pathname = '/product';
+    } 
+
     const openkeys = this.findOpenkeys(pathname, menus);
     return (
-      <Menu theme="dark"
-        defaultSelectedKeys={[pathname]}
-        defaultOpenKeys={[openkeys]}
+      <Menu theme="dark"  //主题色
+        defaultSelectedKeys={[pathname]} //默认选中
+        defaultOpenKeys={[openkeys]}  //默认展开
         mode="inline">
           {this.createMenus(menus)}
       </Menu>

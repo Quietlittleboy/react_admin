@@ -1,6 +1,9 @@
 import axios from 'axios';
+import {message} from 'antd';
 import errorCode from '../config/error-code';
 import store from '$redux/store';
+import {removeItem} from '$utils/storage';
+import {removeUser} from '$redux/actions';
 
 const axiosIstance = axios.create({
     baseURL: 'api',
@@ -55,7 +58,17 @@ axiosIstance.interceptors.response.use(
 
         // 接收到响应，但是响应失败
         if(err.response){
-            errMessage = errorCode[err.response.status]
+
+            const status = err.response.status
+            errMessage = errorCode[status]
+
+            // 判断token出了问题
+            if(status === 401){
+
+                message.error('登录过期，请重新登录')
+                removeItem('user');
+                store.dispatch(removeUser());
+            }
 
             // 没有接收到响应
         }else{

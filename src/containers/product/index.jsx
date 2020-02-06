@@ -69,6 +69,10 @@ export default class Product extends Component{
         this.getProductList(1, 3)
     }
 
+    // 显示添加商品
+    showAddProduct = () => {
+        this.props.history.push('/product/add')
+    }
     render(){
         const { productList, total} = this.state
         return (
@@ -84,7 +88,7 @@ export default class Product extends Component{
                     </div>
                 }
                 extra={
-                    <Button type='primary'>
+                    <Button type='primary' onClick={this.showAddProduct}>
                         <Icon type='plus'/>
                         添加商品
                     </Button>
