@@ -70,8 +70,8 @@ axiosIstance.interceptors.response.use(
                 store.dispatch(removeUser());
             }
 
-            // 没有接收到响应
-        }else{
+            
+        }else{  // 没有接收到响应
             if(err.message.indexOf('Network Error') !== -1){
                 errMessage = '网络连接失败'
             }else if(err.message.indexOf('timeout') !== -1){

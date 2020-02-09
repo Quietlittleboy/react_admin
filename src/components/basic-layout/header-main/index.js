@@ -73,7 +73,7 @@ class HeaderMain extends Component {
                 removeItem('user');
 
                 this.props.removeUser();
-                this.props.history.replace('./login');
+                this.props.history.replace('/login');
             },
         });
     }

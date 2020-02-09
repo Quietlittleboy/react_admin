@@ -1,10 +1,10 @@
-import React,{Component} from 'react';
-import {Card, Select, Input, Button, Icon, Table, message  } from 'antd';
-import {reqGetProductList} from '$api';
+import React, { Component } from 'react';
+import { Card, Select, Input, Button, Icon, Table, message } from 'antd';
+import { reqGetProductList } from '$api';
 
 
-export default class Product extends Component{
-    state=({
+export default class Product extends Component {
+    state = ({
         productList: [],
         total: 0
     })
@@ -24,7 +24,7 @@ export default class Product extends Component{
         {
             title: '商品状态',
             dataIndex: 'status',
-            render:() => {
+            render: () => {
                 return (
                     <div>
                         <Button type='primary'>上架</Button>
@@ -35,46 +35,58 @@ export default class Product extends Component{
         },
         {
             title: '操作',
-            dataIndex: '',
-            render: () => {
+            // dataIndex: '',
+            render: (product) => {
                 return (
                     <div>
                         <Button type='link'>详情</Button>
-                        <Button type='link'>修改</Button>
+                        <Button type='link' onClick={this.showUpdateProduct(product)}>修改</Button>
                     </div>
                 )
             }
         }
     ]
-   
-    getProductList=(pageNum, pageSize) => {
+
+    // 显示修改商品页面
+    showUpdateProduct = (product) => {
+        return () => {
+            // 获取点击的商品-id
+            const id = product._id;
+            // 跳转到修改页面
+            // 第二个参数是给product-form传递路由数据
+            this.props.history.push('/product/update/' + id, product)
+        }
+    }
+
+    getProductList = (pageNum, pageSize) => {
 
         reqGetProductList(pageNum, pageSize)
-        .then(response => {
-            
-            this.setState({
-                productList: response.list,
-                total:  response.total
+            .then(response => {
+
+                this.setState({
+                    productList: response.list,
+                    total: response.total
+                })
+
+                message.success('获取商品列表成功')
             })
+            .catch((err) => {
 
-            message.success('获取商品列表成功')
-        })
-        .catch((err) => {
-
-            message.error(err);
-        })
+                message.error(err);
+            })
     };
 
-    componentDidMount(){
+    componentDidMount() {
         this.getProductList(1, 3)
     }
 
-    // 显示添加商品
+    // 显示添加商品页面
     showAddProduct = () => {
         this.props.history.push('/product/add')
     }
-    render(){
-        const { productList, total} = this.state
+
+    render() {
+        const { productList, total } = this.state
         return (
             <Card
                 title={
@@ -83,13 +95,13 @@ export default class Product extends Component{
                             <Select.Option value='1'>根据商品名称</Select.Option>
                             <Select.Option value='2'>根据商品描述</Select.Option>
                         </Select>
-                        <Input placeholder='关键字' style={{width: 200, margin: '0 10px'}}/>
+                        <Input placeholder='关键字' style={{ width: 200, margin: '0 10px' }} />
                         <Button type='primary'>搜索</Button>
                     </div>
                 }
                 extra={
                     <Button type='primary' onClick={this.showAddProduct}>
-                        <Icon type='plus'/>
+                        <Icon type='plus' />
                         添加商品
                     </Button>
                 }
